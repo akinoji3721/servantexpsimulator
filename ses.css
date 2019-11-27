@@ -1,0 +1,44 @@
+/* reqSeedFire */
+
+#reqSeedFire th:nth-child(1),
+#reqSeedFire td:nth-child(1) {
+	width: 96px;
+	min-width: 96px;
+	max-width: 96px;
+}
+#reqSeedFire th:nth-child(2),
+#reqSeedFire td:nth-child(2) {
+	width: 128px;
+	min-width: 128px;
+	max-width: 128px;
+}
+#reqSeedFire th:nth-child(3),
+#reqSeedFire td:nth-child(3) {
+	min-width: 288px;
+}
+
+/* reqSeedFire_after */
+
+#reqSeedFire_after th:nth-child(1),
+#reqSeedFire_after td:nth-child(1) {
+	width: 96px;
+	min-width: 96px;
+	max-width: 96px;
+}
+#reqSeedFire_after th:nth-child(2),
+#reqSeedFire_after td:nth-child(2) {
+	width: 128px;
+	min-width: 128px;
+	max-width: 128px;
+}
+#reqSeedFire_after th:nth-child(3),
+#reqSeedFire_after td:nth-child(3) {
+	min-width: 128px;
+}
+
+/* btn */
+button {
+	width: 80px;
+	min-width: 80px;
+	max-width: 80px;
+}
