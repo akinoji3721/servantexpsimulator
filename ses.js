@@ -2,7 +2,7 @@
  * @file Fate/Grand Orderのサーヴァント強化に使用する種火の個数をシミュレートします。
  * @author 秋ノ字<https://twitter.com/akinoji3721>
  * @since v1.0.0
- * @version v1.0.0
+ * @version v1.0.1
  */
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -171,7 +171,7 @@ function calcReqSeedFire(params, lvLimit, expList) {
 	var table = $('div.card#reqSeedFire_after').find('table')[0];
 	$(table).find('tbody').empty();
 	var remainingLvLimit = $.grep(lvLimit, function(elem, index) {
-		return (elem >= params['nextLvLimit2']);
+		return (elem >= params['nextLvLimit1']);
 	});
 	for(var i = 0; i < remainingLvLimit.length - 1; i++) {
 		// 区間ごとの必要種火数と総計値を算出
