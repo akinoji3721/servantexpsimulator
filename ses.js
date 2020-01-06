@@ -16,7 +16,7 @@
  */
 function execSimulate(useSeedFire, synResult) {
 
-	// パラメータ取得
+	// パラメータ取得(Lv上限以外)
 	var params = {
 		rarity: parseInt($('select[name="rarity"]').val()),
 		levelFrom: parseInt($('select[name="levelFrom"]').val()),
@@ -26,9 +26,28 @@ function execSimulate(useSeedFire, synResult) {
 		nextLvLimit2: parseInt($('#nextLvLimit2').text()),
 		addExp: 32400 * useSeedFire * synResult
 	}
+	
 	// JSON読込(上限Lvは該当レアリティのものを抽出)
 	var lvLimit = JSON.parse($('#lvLimit').html())[params['rarity']];
 	var expList = JSON.parse($('#expList').html());
+	
+	// パラメータ取得(Lv上限)
+	if(lvLimit.indexOf(params['levelFrom']) < lvLimit.length - 1) {
+		params['nextLvLimit1'] = $.grep(lvLimit, function(elem, index) {
+			return (elem > params['levelFrom']);
+		})[0];
+	}   
+	else {
+		params['nextLvLimit1'] = params['levelFrom'];
+	}
+	if(lvLimit.indexOf(params['nextLvLimit1']) < lvLimit.length - 1) {
+		params['nextLvLimit2'] = $.grep(lvLimit, function(elem, index) {
+			return (elem > params['nextLvLimit1']);
+		})[0];
+	}   
+	else {
+		params['nextLvLimit2'] = params['nextLvLimit1'];
+	}
 
 	// 合成シミュレート
 	synthesisSimulate(params, lvLimit, expList);
