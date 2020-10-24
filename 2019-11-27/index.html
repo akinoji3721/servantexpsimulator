@@ -1,0 +1,209 @@
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<title>FGO サーヴァント経験値シミュレータ</title>
+		<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+		<link href="ses.css" rel="stylesheet">
+	</head>
+	<body>
+		<div id="content" class="container-fluid form-group m-0 p-3">
+			<h3 class="mb-3">
+				<span>Fate/Grand Order サーヴァント経験値シミュレータ</span>
+				<small class="text-muted">ver1.1.0</small>
+			</h3>
+			<div id="parameter" class="mb-3">
+				<h5>
+					<span>シミュレート</span>
+					<button class="btn btn-sm btn-primary" name="simulate">実行</button>
+					<button class="btn btn-sm btn-secondary" name="reset">リセット</button>
+				</h5>
+				<div class="row">
+					<div class="col-lg">
+						<div class="input-group py-1">
+							<div class="input-group-prepend">
+								<span class="input-group-text" id="rarity">レアリティ</span>
+							</div>
+							<select class="custom-select" name="rarity">
+								<option value="5" selected>★5</option>
+								<option value="4">★4</option>
+								<option value="3">★3</option>
+								<option value="2">★2(★0)</option>
+								<option value="1">★1</option>
+							</select>
+						</div>
+					</div>
+					<div class="col-lg">
+						<div class="input-group py-1">
+							<div class="input-group-prepend">
+								<span class="input-group-text" id="levelFrom">現在Lv</span>
+							</div>
+							<select class="form-control" name="levelFrom"></select>
+						</div>
+					</div>
+					<div class="col-lg">
+						<div class="input-group py-1">
+							<div class="input-group-prepend">
+								<span class="input-group-text" id="expNext">Next</span>
+							</div>
+							<input type="number" class="form-control" name="expNext" aria-label="expNext" aria-describedby="expNext" min=100 max=1456500 step=100 value=100 pattern="[0-9]+">
+						</div>
+					</div>
+					<div class="col-lg">
+						<div class="input-group py-1">
+							<div class="input-group-prepend">
+								<span class="input-group-text" id="fraction">端数</span>
+							</div>
+							<select class="custom-select" name="fraction">
+								<option value="0">切り捨て</option>
+								<option value="1">四捨五入</option>
+								<option value="2" selected>切り上げ</option>
+							</select>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="reqSeedFire" class="card mb-3">
+				<h5 class="card-header p-2">
+					<span>必要種火数（★4一致）目標Lv:</span><span id="nextLvLimit1">50</span>
+				</h5>
+				<div class="card-body table-responsive p-0">
+					<table class="table text-nowrap mb-0">
+						<thead>
+							<tr>
+								<th class="px-2 py-1 align-middle" scope="row">
+									<div>想定結果</div>
+								</th>
+								<th class="px-2 py-1 align-middle" scope="row">
+									<div>必要種火数</div>
+									<div>（★4一致）</div>
+								</th>
+								<th class="px-2 py-1 align-middle" scope="row">
+									<div>実際の結果</div>
+									<div>（再シミュレート）</div>
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td class="p-1 align-middle">
+									<span>成功</span>
+								</td>
+								<td class="p-1 align-middle">
+									<input type="number" class="form-control" name="useSeedFire" aria-label="useSeedFire" aria-describedby="useSeedFire" min=1 max=99 step=1 value=64 pattern="[0-9]+" readonly="readonly">
+								</td>
+								<td class="p-0 align-middle">
+									<button type="button" class="btn btn-primary btn-sm m-1" name="reSimulate" value=1>成功</button>
+								</td>
+							</tr>
+							<tr>
+								<td class="p-1 align-middle">
+									<span>大成功</span>
+								</td>
+								<td class="p-1 align-middle">
+									<input type="number" class="form-control" name="useSeedFire" aria-label="useSeedFire" aria-describedby="useSeedFire" min=1 max=99 step=1 value=32 pattern="[0-9]+" readonly="readonly">
+								</td>
+								<td class="p-0 align-middle">
+									<button type="button" class="btn btn-primary btn-sm m-1" name="reSimulate" value=1>成功</button>
+									<button type="button" class="btn btn-primary btn-sm m-1" name="reSimulate" value=2>大成功</button>
+								</td>
+							</tr>
+							<tr>
+								<td class="p-1 align-middle">
+									<span>極大成功</span>
+								</td>
+								<td class="p-1 align-middle">
+									<input type="number" class="form-control" name="useSeedFire" aria-label="useSeedFire" aria-describedby="useSeedFire" min=1 max=99 step=1 value=21 pattern="[0-9]+" readonly="readonly">
+								</td>
+								<td class="p-0 align-middle">
+									<button type="button" class="btn btn-primary btn-sm m-1" name="reSimulate" value=1>成功</button>
+									<button type="button" class="btn btn-primary btn-sm m-1" name="reSimulate" value=2>大成功</button>
+									<button type="button" class="btn btn-primary btn-sm m-1" name="reSimulate" value=3>極大成功</button>
+								</td>
+							</tr>
+							<tr>
+								<td class="p-1 align-middle">
+									<span>（任意）</span>
+								</td>
+								<td class="p-1 align-middle">
+									<input type="number" class="form-control" name="useSeedFire" aria-label="useSeedFire" aria-describedby="useSeedFire" min=1 max=99 step=1 value=20 pattern="[0-9]+">
+								</td>
+								<td class="p-0 align-middle">
+									<button type="button" class="btn btn-primary btn-sm m-1" name="reSimulate" value=1>成功</button>
+									<button type="button" class="btn btn-primary btn-sm m-1" name="reSimulate" value=2>大成功</button>
+									<button type="button" class="btn btn-primary btn-sm m-1" name="reSimulate" value=3>極大成功</button>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div id="reqSeedFire_after" class="card mb-3">
+				<h5 class="card-header p-2">
+					<span>必要種火数（★4一致）Lv</span><span id="nextLvLimit2">60</span><span>以降</span>
+				</h5>
+				<div class="card-body table-responsive p-0">
+					<table class="table text-nowrap table-striped mb-0">
+						<thead>
+							<tr>
+								<th class="px-2 py-1 align-middle" scope="row">
+									<div>Lv区間</div>
+								</th>
+								<th class="px-2 py-1 align-middle" scope="row">
+									<div>必要種火数</div>
+									<div>（★4一致）</div>
+								</th>
+								<th class="px-2 py-1 align-middle" scope="row">
+									<div>必要種火数</div>
+									<div>（総計）</div>
+								</th>
+							</tr>
+							<tr class="d-none" data-tmpname="def">
+								<td class="p-1"><span data-elemname="levelFromTo">0 → 0</span></td>
+								<td class="p-1"><span data-elemname="seedFirePart">0</span></td>
+								<td class="p-1"><span data-elemname="seedFireTotal">0</span></td>
+							</tr>
+						</thead>
+						<tbody>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div id="overview" class="card mb-3">
+				<h5 class="card-header p-2">取扱説明書</h5>
+				<div class="card-body">
+					<h5 class="mb-2 p-1 bg-info text-light">概要</h5>
+					<div class="mb-2">
+						<div>大成功や極大成功を考慮した場合に、種火をいくつ使うべきかを計算します。</div>
+						<div>★4種火（クラス一致またはALL）の使用を前提としており、これ以外の種火や獲得経験値2倍といった要素には対応しておりません。</div>
+					</div>
+					<h5 class="mb-2 p-1 bg-info text-light">使い方</h5>
+					<div class="mb-2">
+						<div>レアリティ・現在Lv・Nextに対象サーヴァントの現状を入力し、実行ボタンを押すとシミュレートが行われ、表が更新されます。</div>
+						<div>必要種火数の小数点以下を切り捨てるか・四捨五入するか・切り上げるかは端数で変更できます。</div>
+					</div>
+					<h5 class="my-2 p-1 bg-info text-light">合成結果の反映</h5>
+					<div class="mb-2">
+						<div>成功・大成功・極大成功ボタンを押すと、パラメータに経験値32,400×ボタンがある行の必要種火数×係数（成功=1、大成功=2、極大成功=3）を加算したシミュレートが行われます。</div>
+						<div>「想定結果」列に「（任意）」と書かれた行は、使用する種火の数を任意に設定できます。</div>
+					</div>
+					<h5 class="my-2 p-1 bg-info text-light">動作環境</h5>
+					<div class="mb-2">
+						<div>Google Chrome（PC）およびSafari（iPhone）での動作を確認しております。不具合があった場合は詳細と共にご連絡ください。</div>
+					</div>
+					<h5 class="my-2 p-1 bg-info text-light">規約・免責事項等</h5>
+					<div class="mb-2">
+						<div>本ページは自分こと秋ノ字（<a href="https://twitter.com/akinoji3721">Twitter</a>, <a href="https://note.com/akinoji">Note</a>）が非公式に作成したものです。問合せはTwitterのDMやNoteのメッセージへお願いします。</div>
+						<div>表示される内容の正確性は保証いたしかねます。本ページの利用によって発生する不利益や損害へは責任を負いかねますので、予めご了承ください。</div>
+						<div>ソースの二次利用に関しては事前にご連絡を頂きますようお願いいたします。無断の二次利用を見かけた際はご一報いただけますと幸いです。</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" integrity="sha384-xrRywqdh3PHs8keKZN+8zzc5TX0GRTLCcmivcbNJWm2rs5C8PRhcEn3czEjhAO9o" crossorigin="anonymous"></script>
+	<script src="ses.js"></script>
+	<script type="application/json" id="lvLimit"></script>
+	<script type="application/json" id="expList"></script>
+</html>
