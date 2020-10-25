@@ -348,6 +348,12 @@ var updateLog = new Vue({
     data: {
         items: [
             {
+                date: '2020-10-25',
+                textList: [
+                    'CSSを修正。'
+                ],
+            },
+            {
                 date: '2020-10-24',
                 textList: [
                     'フレームワークをjQuery+bootstrapからVue.js+Bulmaへ変更。',
