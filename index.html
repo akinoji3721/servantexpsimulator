@@ -48,7 +48,7 @@
 									<input class="input" type="number" name="expNext" min=0 v-bind:max="expMax" step=100 pattern="[0-9]+" v-bind:value="expNext" v-on:change="changeParam($event);">
 								</template>
 							</form-item>
-							<form-item label="種火一致">
+							<form-item label="クラス一致">
 								<template v-slot:item>
 									<div class="select">
 										<select name="matchClass" v-bind:value="matchClass" v-on:change="changeParam($event);">
