@@ -2,7 +2,7 @@
  * @file Fate/Grand Orderのサーヴァント強化に使用する種火の個数をシミュレートします。
  * @author 秋ノ字<https://twitter.com/akinoji3721>
  * @since v1.0.0
- * @version v1.1.0
+ * @version v1.1.1
  */
 
 /** セクションテンプレート */
@@ -349,12 +349,14 @@ var updateLog = new Vue({
         items: [
             {
                 date: '2020-10-25',
+                version: '1.1.1',
                 textList: [
                     'CSSを修正。'
                 ],
             },
             {
                 date: '2020-10-24',
+                version: '1.1.0',
                 textList: [
                     'フレームワークをjQuery+bootstrapからVue.js+Bulmaへ変更。',
                     'パラメータに「クラス一致」「経験値倍率」を追加。',
@@ -362,6 +364,7 @@ var updateLog = new Vue({
             },
             {
                 date: '2019-11-27',
+                version: '1.0.0',
                 textList: [
                     '公開。',
                 ],

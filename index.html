@@ -11,7 +11,7 @@
 		<!-- タイトル -->
 		<div class="box is-radiusless has-background-primary">
 			<h1 class="title has-text-white">Fate/Grand Order サーヴァント経験値シミュレータ</h1>
-			<h2 class="subtitle has-text-primary-light">ver1.1.0</h2>
+			<h2 class="subtitle has-text-primary-light">ver1.1.1</h2>
 		</div>
 		<!-- コンテンツ -->
 		<div class="mx-5 mb-5">
@@ -160,7 +160,7 @@
 					<template v-slot:contents>
 						<article class="message is-primary" v-for="item in items">
 							<div class="message-header">
-								<p>{{ item.date }}</p>
+								<p>{{ item.date }} (ver{{ item.version }})</p>
 							</div>
 							<div class="message-body">
 								<div v-for="text in item.textList" v-html="text"></div>
