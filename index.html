@@ -11,7 +11,7 @@
 		<!-- タイトル -->
 		<div class="box is-radiusless has-background-primary">
 			<h1 class="title has-text-white">Fate/Grand Order サーヴァント経験値シミュレータ</h1>
-			<h2 class="subtitle has-text-primary-light">ver1.1.1</h2>
+			<h2 class="subtitle has-text-primary-light">ver1.2.0</h2>
 		</div>
 		<!-- コンテンツ -->
 		<div class="mx-5 mb-5">
@@ -48,7 +48,16 @@
 									<input class="input" type="number" name="expNext" min=0 v-bind:max="expMax" step=100 pattern="[0-9]+" v-bind:value="expNext" v-on:change="changeParam($event);">
 								</template>
 							</form-item>
-							<form-item label="クラス一致">
+							<form-item label="種火レアリティ">
+								<template v-slot:item>
+									<div class="select">
+										<select name="seedFireRarity" v-bind:value="seedFireRarity" v-on:change="changeParam($event);">
+											<option v-for="val in seedFireRarityList" v-bind:value="val.value" v-bind:key="val.value">{{ val.name }}</option>
+										</select>
+									</div>
+								</template>
+							</form-item>
+							<form-item label="種火一致">
 								<template v-slot:item>
 									<div class="select">
 										<select name="matchClass" v-bind:value="matchClass" v-on:change="changeParam($event);">

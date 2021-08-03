@@ -2,7 +2,7 @@
  * @file Fate/Grand Orderのサーヴァント強化に使用する種火の個数をシミュレートします。
  * @author 秋ノ字<https://twitter.com/akinoji3721>
  * @since v1.0.0
- * @version v1.1.1
+ * @version v1.2.0
  */
 
 /** セクションテンプレート */
@@ -13,24 +13,31 @@ Vue.component('form-item', {props: {label: String}, template: '#formItem'});
 
 /** レアリティ */
 var rarityList = {
-    5: {name: "★5", lvLimit: [50, 60, 70, 80, 90, 92, 94, 96, 98, 100]},
-    4: {name: "★4", lvLimit: [40, 50, 60, 70, 80, 85, 90, 92, 94, 96, 98, 100]},
-    3: {name: "★3", lvLimit: [30, 40, 50, 60, 70, 75, 80, 85, 90, 92, 94, 96, 98, 100]},
-    2: {name: "★2（★0）", lvLimit: [25, 35, 45, 55, 65, 70, 75, 80, 85, 90, 92, 94, 96, 98, 100]},
-    1: {name: "★1", lvLimit: [20, 30, 40, 50, 60, 70, 75, 80, 85, 90, 92, 94, 96, 98, 100]},
+    5: {name: "★5", lvLimit: [50, 60, 70, 80, 90, 92, 94, 96, 98, 100, 120]},
+    4: {name: "★4", lvLimit: [40, 50, 60, 70, 80, 85, 90, 92, 94, 96, 98, 100, 120]},
+    3: {name: "★3", lvLimit: [30, 40, 50, 60, 70, 75, 80, 85, 90, 92, 94, 96, 98, 100, 120]},
+    2: {name: "★2（★0）", lvLimit: [25, 35, 45, 55, 65, 70, 75, 80, 85, 90, 92, 94, 96, 98, 100, 120]},
+    1: {name: "★1", lvLimit: [20, 30, 40, 50, 60, 70, 75, 80, 85, 90, 92, 94, 96, 98, 100, 120]},
 };
 
 /** 最小レベル */
 const lvMin = 1;
 
 /** 最大レベル */
-const lvMax = 100;
+const lvMax = 120;
+
+/** 種火レアリティ */
+var seedFireRarityList = [
+    {value: 3, name: "★3"},
+    {value: 4, name: "★4"},
+    {value: 5, name: "★5"},
+];
 
 /** 種火クラス一致 */
 var matchClassList = [
     {value: parseFloat(1.2), name: "一致"},
     {value: parseFloat(1.0), name: "不一致"},
-]
+];
 
 /** 経験値係数 */
 var expFactorList = [
@@ -45,9 +52,6 @@ var fractionList = [
     {value: 2, name: '切り上げ'},
 ];
 
-/** 種火一つあたりの付与経験値 */
-const expBase = 27000;
-
 /** 経験値リスト */
 var expList = []
 
@@ -59,6 +63,7 @@ var params = new Vue({
         lvFrom: 1,
         expNext: 100,
         expMax: 100,
+        seedFireRarity: 4,
         matchClass: 1.2,
         expFactor: 1.0,
         fraction: 2,
@@ -79,7 +84,7 @@ var params = new Vue({
             // リストオブジェクト初期化
             expList = [{lv: 0, total: 0, next: 0}];
             // Lvごとに処理
-            for(let i = lvMin; i <= lvMax; i++) {
+            for (let i = lvMin; i <= lvMax; i++) {
                 // 新規行オブジェクト生成
                 let newRow = {lv: i, total: 0, next: 0};
                 // 前Lvの総経験値とNext値を取得
@@ -87,15 +92,19 @@ var params = new Vue({
                 let lastNext = expList[i - 1].next;
                 // 総経験値は上記の合算
                 newRow.total = lastTotal + lastNext;
-                // Next値はLv90未満と90以上で数式を分ける
-                if(i < 100) {
-                    if(i < 90) {
+                // Next値はLv90未満、100未満、それ以上で数式を分ける
+                if (i < 120) {
+                    if (i < 90) {
                         // 90未満: 前LvのNext値 + 現Lv * 100
                         newRow.next = lastNext + i * 100;
                     }
-                    else {
-                        // 90以上: 前LvのNext値 + (現Lv * (現Lv - 89)) * 200
+                    else if (i < 100) {
+                        // 90以上100未満: 前LvのNext値 + (現Lv * (現Lv - 89)) * 200
                         newRow.next = lastNext + i * (i - 89) * 200;
+                    }
+                    else {
+                        // 100以上: 20311500
+                        newRow.next = 20311500;
                     }
                 }
                 // オブジェクトを追加
@@ -110,6 +119,7 @@ var params = new Vue({
             this.rarity = 5;
             this.lvFrom = 1;
             this.setNext();
+            this.seedFireRarity = 4;
             this.matchClass = 1.2;
             this.expFactor = 1.0;
             this.fraction = 2;
@@ -121,7 +131,7 @@ var params = new Vue({
          * 目標Lvを現在Lvに合わせた値へ変更する
          */
         setNextLvLimit: function() {
-            if(this.lvFrom < lvMax) {
+            if (this.lvFrom < lvMax) {
                 reqSeedFire.nextLvLimit = rarityList[this.rarity].lvLimit.find(elem => elem > this.lvFrom);
             }
             else {
@@ -141,6 +151,7 @@ var params = new Vue({
          * @return 種火一つあたりの経験値（各種変数適用後）
          */
         getExpPerSeedFire(synResult) {
+            let expBase = 3 ** (this.seedFireRarity - 2) * 3000;
             return expBase * this.matchClass * this.expFactor * synResult;
         },
         /**
@@ -151,7 +162,7 @@ var params = new Vue({
         getUseSeedFire: function(exp, synResult) {
             let ret = 0;
             let mathBase = exp / this.getExpPerSeedFire(synResult);
-            switch(this.fraction) {
+            switch (this.fraction) {
                 // 切り捨て
                 case 0:
                     ret = Math.floor(mathBase);
@@ -178,7 +189,7 @@ var params = new Vue({
             synthesizedTotalExp = Math.min(synthesizedTotalExp, expList[reqSeedFire.nextLvLimit].total);
 
             // 合成後のLvとNext値、および目標Lvを取得・設定
-            if(synthesizedTotalExp < expList[lvMax].total) {
+            if (synthesizedTotalExp < expList[lvMax].total) {
                 this.lvFrom = expList.find(elem => (elem.total + elem.next) > synthesizedTotalExp).lv;
                 this.expNext = expList[this.lvFrom + 1].total - synthesizedTotalExp;
             }
@@ -199,8 +210,8 @@ var params = new Vue({
             let rarityLvLimit = rarityList[this.rarity].lvLimit;
             let useSeedFireAmount = reqSeedFire.rowData[0].useSeedFire;
             reqSeedFireAfter.rowData.splice(0, reqSeedFireAfter.rowData.length);
-            for(let i = 0; i < rarityLvLimit.length - 1; i++) {
-                if(rarityLvLimit[i] >= reqSeedFire.nextLvLimit) {
+            for (let i = 0; i < rarityLvLimit.length - 1; i++) {
+                if (rarityLvLimit[i] >= reqSeedFire.nextLvLimit) {
                     let lvFrom = rarityLvLimit[i];
                     let lvTo = rarityLvLimit[i + 1];
                     let useSeedFire = this.getUseSeedFire(expList[lvTo].total - expList[lvFrom].total, 1);
@@ -220,7 +231,7 @@ var params = new Vue({
          */
         changeParam: function(e) {
             // 内部値書換
-            switch(e.target.name) {
+            switch (e.target.name) {
                 case 'matchClass':
                 case 'expFactor':
                     this[e.target.name] = parseFloat(e.target.value);
@@ -229,7 +240,7 @@ var params = new Vue({
                     this[e.target.name] = parseInt(e.target.value);
             }
             // 現在Lv変更時、Nextと目標Lvの更新も行う
-            if(e.target.name == 'lvFrom') {
+            if (e.target.name == 'lvFrom') {
                 this.setNext();
                 this.setNextLvLimit();
             }
@@ -307,7 +318,6 @@ var howTo = new Vue({
                 title: '概要',
                 textList: [
                     '大成功や極大成功の場合を含めた、次の上限Lvまでに必要な種火の個数を計算します。',
-                    '簡略化のため、★4種火の使用を前提としています。',
                 ],
             },
             {
@@ -347,6 +357,13 @@ var updateLog = new Vue({
     el: '#updateLog',
     data: {
         items: [
+            {
+                date: '2021-08-04',
+                version: '1.2.0',
+                textList: [
+                    'Lv上限上昇対応、種火レアリティ選択機能実装。'
+                ],
+            },
             {
                 date: '2020-10-25',
                 version: '1.1.1',
